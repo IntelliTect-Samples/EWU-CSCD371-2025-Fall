@@ -168,7 +168,7 @@ jobs:
       - name: ReportGenerator
         id: reportgenerator
         if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
-        uses: danielpalme/ReportGenerator-GitHub-Action@5.4.1
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.4.12
         with:
           reports: '**/coverage.cobertura.xml'
           targetdir: coveragereport

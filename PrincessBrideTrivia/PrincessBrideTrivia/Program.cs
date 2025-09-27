@@ -1,4 +1,6 @@
-﻿namespace PrincessBrideTrivia;
+﻿using System.Diagnostics;
+
+namespace PrincessBrideTrivia;
 
 public class Program
 {
@@ -6,7 +8,7 @@ public class Program
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
-
+        Console.WriteLine(questions.Length);
         int numberCorrect = 0;
         for (int i = 0; i < questions.Length; i++)
         {
@@ -16,12 +18,17 @@ public class Program
                 numberCorrect++;
             }
         }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        if (numberOfQuestions == 0)
+            return "N/A";
+
+        double precent = (double)numberCorrectAnswers / numberOfQuestions * 100;
+
+        return $"{precent:N0}%";
     }
 
     public static bool AskQuestion(Question question)
@@ -51,10 +58,10 @@ public class Program
 
     public static void DisplayQuestion(Question question)
     {
-        Console.WriteLine("Question: " + question.Text);
+        Console.WriteLine($"Question: {question.Text}");
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{(i + 1)} : { question.Answers[i]}");
         }
     }
 
@@ -79,13 +86,14 @@ public class Program
 
             string correctAnswerIndex = lines[lineIndex + 4];
 
-            Question question = new();
+            Question question = new Question();
             question.Text = questionText;
             question.Answers = new string[3];
             question.Answers[0] = answer1;
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+            questions[i] = question;
         }
         return questions;
     }

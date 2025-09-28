@@ -42,8 +42,8 @@ public class Program
             if (attemptIndex != 2)
             {
                 Console.WriteLine("Do you want to make another attempt?");
-                Console.WriteLine("1: Yes");
-                Console.WriteLine("2: No");
+                Console.WriteLine("1 : Yes");
+                Console.WriteLine("2 : No");
                 ResponseValidation responseValidation = ResponseValidation.Invalid;
                 while (responseValidation == ResponseValidation.Invalid) 
                 { 

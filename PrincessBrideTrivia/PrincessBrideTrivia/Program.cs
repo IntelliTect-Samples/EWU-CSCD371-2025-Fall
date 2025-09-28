@@ -1,41 +1,70 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace PrincessBrideTrivia;
 
 public class Program
 {
+    public enum ResponseValidation
+    {
+        Accept,
+        Reject,
+        Invalid
+    }
+
+    private const int QuestionBlockSize = 5;
+
+    private const int AnswerOptionsGiven = QuestionBlockSize - 2;
+    // since we know that each question block contains both a question text and a correct answer, we can get the number
+    // of questions expected by subtracting 2 from the question block size
+
     public static void Main(string[] args)
     {
+        const int maxAttempts = 3;
+
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
-        Console.WriteLine(questions.Length);
         int numberCorrect = 0;
-        int[] attemptScores = { 0, 0, 0};
-        for (int j = 0; j < 3; j++)
+        int[] attemptScores = new int[maxAttempts];
+        for (int attemptIndex = 0; attemptIndex < maxAttempts; attemptIndex++)
         {
-            for (int i = 0; i < questions.Length; i++)
+            foreach (Question question in questions)
             {
-                bool result = AskQuestion(questions[i]);
+                bool result = AskQuestion(question);
                 if (result)
                 {
                     numberCorrect++;
                 }
             }
-            attemptScores[j] = numberCorrect;
+            attemptScores[attemptIndex] = numberCorrect;
             Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
             numberCorrect = 0;
-            if (j != 2)
+            if (attemptIndex != 2)
             {
                 Console.WriteLine("Do you want to make another attempt?");
                 Console.WriteLine("1: Yes");
                 Console.WriteLine("2: No");
-                if (!AcceptRetryQuiz())
+                ResponseValidation responseValidation = ResponseValidation.Invalid;
+                while (responseValidation == ResponseValidation.Invalid) 
+                { 
+                    responseValidation = AcceptRetryQuiz(Console.ReadLine());
+                }
+                if (responseValidation == ResponseValidation.Reject)
                 {
                     break;
                 }
+                else if(responseValidation == ResponseValidation.Accept)
+                {
+                    Random random = new Random();
+                    questions = questions.OrderBy(x => random.Next()).ToArray();
+                    foreach (Question question in questions)
+                    {
+                        question.RandomizeOrder(random.Next());
+                    }
+                }
             }
         }
-        Console.WriteLine($"Your final score is {FindHighestScore(attemptScores, questions.Length)}");
+        Console.WriteLine($"Your final score is {GetPercentCorrect(attemptScores.Max(), questions.Length)}");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
@@ -44,7 +73,6 @@ public class Program
             return "N/A";
 
         double precent = (double)numberCorrectAnswers / numberOfQuestions * 100;
-
         return $"{precent:N0}%";
     }
 
@@ -58,39 +86,31 @@ public class Program
 
     public static string GetGuessFromUser()
     {
-        return Console.ReadLine();
+        while(true)
+        {
+            if(int.TryParse(Console.ReadLine(), out int guess) && guess > 0 && guess <= AnswerOptionsGiven)
+            {
+                return guess.ToString();
+            }
+            Console.WriteLine($"Please enter a number between 1 and {AnswerOptionsGiven}.");
+        }
     }
 
-    public static bool AcceptRetryQuiz()
+    public static ResponseValidation AcceptRetryQuiz(string userInput)
     {
-        string userInput = Console.ReadLine();
         if (userInput == "1")
         {
-            return true;
+            return ResponseValidation.Accept;
         }
         else if (userInput == "2")
         {
-            return false;
+            return ResponseValidation.Reject;
         }
         else
         {
-            return AcceptRetryQuiz();
+            return ResponseValidation.Invalid;
         }
     }
-
-    public static string FindHighestScore(int[] userScores, int numQuestions)
-    {
-        int indexOfHighestScore = 0;
-        for (int i = 1; i < userScores.Length; ++i)
-        {
-            if (userScores[indexOfHighestScore] < userScores[i])
-            {
-                indexOfHighestScore = i;
-            }
-        }
-        return GetPercentCorrect(userScores[indexOfHighestScore], numQuestions);
-    }
-
     public static bool DisplayResult(string userGuess, Question question)
     {
         if (userGuess == question.CorrectAnswerIndex)
@@ -124,27 +144,20 @@ public class Program
         Question[] questions = new Question[lines.Length / 5];
         for (int i = 0; i < questions.Length; i++)
         {
-            //These two variables could be moved into params to give more versatility in question setup
-            int questionBlockSize = 5;
-
-            // since we know that each question block contains both a question text and a correct answer, we can get the number
-            // of questions expected by subtracting 2 from the question block size
-            int numAnswerOptionsGiven = questionBlockSize - 2; 
-
             Question question = new Question();
 
-            int lineIndex = i * questionBlockSize;
+            int lineIndex = i * QuestionBlockSize;
             string questionText = lines[lineIndex];
 
             question.Text = questionText;
-            question.Answers = new string[numAnswerOptionsGiven];
+            question.Answers = new string[AnswerOptionsGiven];
 
-            for (int j = 0; j < numAnswerOptionsGiven; j++)
+            for (int j = 0; j < AnswerOptionsGiven; j++)
             {
                 question.Answers[j] = lines[lineIndex + j + 1]; // + 1 is included because index 0 of lines is the question text
             }
 
-            question.CorrectAnswerIndex = lines[lineIndex + questionBlockSize - 1];
+            question.CorrectAnswerIndex = lines[lineIndex + QuestionBlockSize - 1];
             questions[i] = question;
 
         }

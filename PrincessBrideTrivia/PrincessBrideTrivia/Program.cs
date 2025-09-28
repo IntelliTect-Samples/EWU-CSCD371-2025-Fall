@@ -59,7 +59,7 @@ public class Program
                     questions = questions.OrderBy(x => random.Next()).ToArray();
                     foreach (Question question in questions)
                     {
-                        question.RandomizeOrder(random.Next());
+                        question.RandomizeAnswerOrder(random.Next());
                     }
                 }
             }

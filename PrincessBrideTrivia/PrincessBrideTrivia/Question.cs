@@ -5,7 +5,7 @@ public class Question
     public string Text { get; set; }
     public string[] Answers { get; set; }
     public string CorrectAnswerIndex { get; set; }
-    public void RandomizeOrder(int randomSeed)
+    public void RandomizeAnswerOrder(int randomSeed)
     {
         string lastCorrectAnswer = Answers[int.Parse(CorrectAnswerIndex) - 1];
 

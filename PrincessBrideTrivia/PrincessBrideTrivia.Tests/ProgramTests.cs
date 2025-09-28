@@ -101,7 +101,7 @@ public class ProgramTests
             string expectedCorrectAnswer = "1";
             question.Answers = new string[] { "1", "2", "3" };
             // Act
-            question.RandomizeOrder(seed + i);
+            question.RandomizeAnswerOrder(seed + i);
             // Assert
             if(!string.Equals(expectedCorrectAnswer, question.Answers[int.Parse(question.CorrectAnswerIndex) - 1]))
             {

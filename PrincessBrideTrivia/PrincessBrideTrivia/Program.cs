@@ -77,23 +77,29 @@ public class Program
         Question[] questions = new Question[lines.Length / 5];
         for (int i = 0; i < questions.Length; i++)
         {
-            int lineIndex = i * 5;
-            string questionText = lines[lineIndex];
+            //These two variables could be moved into params to give more versatility in question setup
+            int questionBlockSize = 5;
 
-            string answer1 = lines[lineIndex + 1];
-            string answer2 = lines[lineIndex + 2];
-            string answer3 = lines[lineIndex + 3];
-
-            string correctAnswerIndex = lines[lineIndex + 4];
+            // since we know that each question block contains both a question text and a correct answer, we can get the number
+            // of questions expected by subtracting 2 from the question block size
+            int numAnswerOptionsGiven = questionBlockSize - 2; 
 
             Question question = new Question();
+
+            int lineIndex = i * questionBlockSize;
+            string questionText = lines[lineIndex];
+
             question.Text = questionText;
-            question.Answers = new string[3];
-            question.Answers[0] = answer1;
-            question.Answers[1] = answer2;
-            question.Answers[2] = answer3;
-            question.CorrectAnswerIndex = correctAnswerIndex;
+            question.Answers = new string[numAnswerOptionsGiven];
+
+            for (int j = 0; j < numAnswerOptionsGiven; j++)
+            {
+                question.Answers[j] = lines[lineIndex + j + 1]; // + 1 is included because index 0 of lines is the question text
+            }
+
+            question.CorrectAnswerIndex = lines[lineIndex + questionBlockSize - 1];
             questions[i] = question;
+
         }
         return questions;
     }

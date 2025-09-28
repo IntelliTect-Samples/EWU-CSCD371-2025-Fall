@@ -69,6 +69,18 @@ public class ProgramTests
         Assert.AreEqual(expectedString, percentage);
     }
 
+    [TestMethod]
+    [DataRow(10, "30%", 1, 2, 3)]
+    [DataRow(10, "80%", 3, 8, 5)]
+    [DataRow(10, "0%", 0, 0, 0)]
+    [DataRow(10, "70%", 7, 7, 5)]
+    [DataRow(10, "90%", 9, 0, 0)]
+    public void FindHighestScore_ReturnsExpectedScore(int numOfQuestions, string expectedScore, params int[] scores)
+    {
+        string highestScore = Program.FindHighestScore(scores, numOfQuestions);
+        Assert.AreEqual(expectedScore, highestScore);
+    }
+
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {

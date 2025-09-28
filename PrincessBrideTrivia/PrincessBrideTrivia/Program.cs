@@ -10,15 +10,32 @@ public class Program
         Question[] questions = LoadQuestions(filePath);
         Console.WriteLine(questions.Length);
         int numberCorrect = 0;
-        for (int i = 0; i < questions.Length; i++)
+        int[] attemptScores = { 0, 0, 0};
+        for (int j = 0; j < 3; j++)
         {
-            bool result = AskQuestion(questions[i]);
-            if (result)
+            for (int i = 0; i < questions.Length; i++)
             {
-                numberCorrect++;
+                bool result = AskQuestion(questions[i]);
+                if (result)
+                {
+                    numberCorrect++;
+                }
+            }
+            attemptScores[j] = numberCorrect;
+            Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
+            numberCorrect = 0;
+            if (j != 2)
+            {
+                Console.WriteLine("Do you want to make another attempt?");
+                Console.WriteLine("1: Yes");
+                Console.WriteLine("2: No");
+                if (!AcceptRetryQuiz())
+                {
+                    break;
+                }
             }
         }
-        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
+        Console.WriteLine($"Your final score is {FindHighestScore(attemptScores, questions.Length)}");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
@@ -42,6 +59,36 @@ public class Program
     public static string GetGuessFromUser()
     {
         return Console.ReadLine();
+    }
+
+    public static bool AcceptRetryQuiz()
+    {
+        string userInput = Console.ReadLine();
+        if (userInput == "1")
+        {
+            return true;
+        }
+        else if (userInput == "2")
+        {
+            return false;
+        }
+        else
+        {
+            return AcceptRetryQuiz();
+        }
+    }
+
+    public static string FindHighestScore(int[] userScores, int numQuestions)
+    {
+        int indexOfHighestScore = 0;
+        for (int i = 1; i < userScores.Length; ++i)
+        {
+            if (userScores[indexOfHighestScore] < userScores[i])
+            {
+                indexOfHighestScore = i;
+            }
+        }
+        return GetPercentCorrect(userScores[indexOfHighestScore], numQuestions);
     }
 
     public static bool DisplayResult(string userGuess, Question question)

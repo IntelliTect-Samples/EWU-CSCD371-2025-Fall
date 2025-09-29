@@ -5,23 +5,19 @@ public class Program
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
-        do
-        {
-            Question[] questions = LoadQuestions(filePath);
+        Question[] questions = LoadQuestions(filePath);
 
-            int numberCorrect = 0;
-            for (int i = 0; i < questions.Length; i++)
+        int numberCorrect = 0;
+        for (int i = 0; i < questions.Length; i++)
+        {
+            bool result = AskQuestion(questions[i]);
+            if (result)
             {
-                bool result = AskQuestion(questions[i]);
-                if (result)
-                {
-                    numberCorrect++;
-                }
+                numberCorrect++;
             }
-            Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
         }
-        while (ReplayQuiz());
-        
+        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+
     }
 
     public static bool ReplayQuiz()
@@ -100,7 +96,6 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
-            questions[i] = question; //store the new question object into the array so later when call questions[i], get tje question instead of a crash
 
         }
         return questions;

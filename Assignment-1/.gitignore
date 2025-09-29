@@ -14,6 +14,7 @@ _layout.cshtml
 
 # Visual Studio code
 .vscode/
+.vs/
 
 # User-specific files
 *.rsuser

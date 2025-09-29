@@ -1,5 +1,7 @@
 namespace PrincessBrideTrivia.Tests;
 
+
+
 [TestClass]
 public class ProgramTests
 {
@@ -85,4 +87,41 @@ public class ProgramTests
             File.AppendAllLines(filePath, lines);
         }
     }
+
+
+
+    [TestMethod]
+    public void DisplayScoreCard_DisplaysUserInputs()
+    {
+        // Arrange
+        Program.ScoreCard.Clear();
+            
+        string user1 = "A";
+        string user2 = "C";
+
+        Program.ScoreCard.Add($"{user1,-15} | {"2",15}");
+        Program.ScoreCard.Add($"{user2,-15} | {"1",15}");
+
+        var originalOut = Console.Out;
+        var sw = new System.IO.StringWriter();
+        try
+        {
+            Console.SetOut(sw);
+
+            // Act
+            Program.DisplayScoreCard();
+
+            // Assert 
+            string output = sw.ToString();
+            StringAssert.Contains(output,(user1));
+            StringAssert.Contains(output,(user2));
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+
+
 }

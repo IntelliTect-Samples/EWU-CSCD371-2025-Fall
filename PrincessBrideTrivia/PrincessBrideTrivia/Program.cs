@@ -5,20 +5,25 @@ public class Program
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
-        Question[] questions = LoadQuestions(filePath);
-
-        int numberCorrect = 0;
-        for (int i = 0; i < questions.Length; i++)
+        do
         {
-            bool result = AskQuestion(questions[i]);
-            if (result)
-            {
-                numberCorrect++;
-            }
-        }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+            Question[] questions = LoadQuestions(filePath);
 
+            int numberCorrect = 0;
+            for (int i = 0; i < questions.Length; i++)
+            {
+                bool result = AskQuestion(questions[i]);
+                if (result)
+                {
+                    numberCorrect++;
+                }
+            }
+            Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        } 
+        while (ReplayQuiz());
+       
     }
+
 
     public static bool ReplayQuiz()
     {

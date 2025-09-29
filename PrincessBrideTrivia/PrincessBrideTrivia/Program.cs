@@ -4,89 +4,168 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        string filePath = GetFilePath();
-        Question[] questions = LoadQuestions(filePath);
+        const string TriviaQuestionsFilePath = "Trivia.txt";
+        
+        try
+        {
+            EnsureFileExists(TriviaQuestionsFilePath);
+        }
+        catch (FileNotFoundException e)
+        {
+            Console.Error.WriteLine($"Critical Error: {e.Message}");
+            Environment.Exit(1);
+        }
+
+        Question[] questions = null;
+        try
+        {
+            questions = ParseQuestionsFromFile(TriviaQuestionsFilePath);
+        }
+        catch (InvalidDataException e)
+        {
+            Console.Error.WriteLine($"Critical Error: {e.Message}");
+            Environment.Exit(1);
+        }
 
         int numberCorrect = 0;
-        for (int i = 0; i < questions.Length; i++)
+        foreach (Question question in questions)
         {
-            bool result = AskQuestion(questions[i]);
-            if (result)
-            {
-                numberCorrect++;
-            }
+            if (AskQuestion(question)) numberCorrect++;
+            
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        if (numberOfQuestions == 0) return "N/A";
+        double percent = (double)numberCorrectAnswers / numberOfQuestions * 100;
+        return Math.Round(percent) + "%";
     }
 
     public static bool AskQuestion(Question question)
     {
         DisplayQuestion(question);
 
-        string userGuess = GetGuessFromUser();
+        int userGuess = GetGuessFromUser();
         return DisplayResult(userGuess, question);
     }
 
-    public static string GetGuessFromUser()
+    public static int GetGuessFromUser()
     {
-        return Console.ReadLine();
+        while (true)
+        {
+            Console.Write("Your answer: ");
+            string input = Console.ReadLine()?.Trim();
+
+            if (int.TryParse(input, out int guess) && guess >= 1)
+                return guess - 1;
+
+            Console.WriteLine("Invalid input. Enter the number for your guess: ");
+        }
     }
 
-    public static bool DisplayResult(string userGuess, Question question)
+    public static bool DisplayResult(int userGuess, Question question)
     {
-        if (userGuess == question.CorrectAnswerIndex)
-        {
-            Console.WriteLine("Correct");
-            return true;
-        }
-
-        Console.WriteLine("Incorrect");
-        return false;
+        bool isCorrect = userGuess == question.CorrectAnswerIndex;
+        Console.WriteLine(isCorrect ? "Correct" : "Incorrect");
+        return isCorrect;
     }
 
     public static void DisplayQuestion(Question question)
     {
         Console.WriteLine("Question: " + question.Text);
-        for (int i = 0; i < question.Answers.Length; i++)
+        for (int i = 0; i < question.Answers.Count; i++)
         {
             Console.WriteLine((i + 1) + ": " + question.Answers[i]);
         }
     }
 
-    public static string GetFilePath()
-    {
-        return "Trivia.txt";
-    }
+    public static void EnsureFileExists(string filePath) =>
+        _ = File.Exists(filePath) ? true : throw new FileNotFoundException($"Error 404: File '{filePath}' Not Found", filePath);
 
-    public static Question[] LoadQuestions(string filePath)
+    public static Question[] ParseQuestionsFromFile(string filePath)
     {
-        string[] lines = File.ReadAllLines(filePath);
+        const string CommentPrefix = "//";
+        const string QuestionTag = "QUESTION:";
+        const string ChoiceTag = "CHOICE:";
+        const string CorrectIndexTag = "CORRECT:";
 
-        Question[] questions = new Question[lines.Length / 5];
-        for (int i = 0; i < questions.Length; i++)
+        var lines = File.ReadAllLines(filePath);
+        var questions = new List<Question>();
+        Question current = null;
+        int lineNumber = 0;
+
+        foreach (var rawLine in lines)
         {
-            int lineIndex = i * 5;
-            string questionText = lines[lineIndex];
+            lineNumber++;
+            string line = rawLine.Trim();
 
-            string answer1 = lines[lineIndex + 1];
-            string answer2 = lines[lineIndex + 2];
-            string answer3 = lines[lineIndex + 3];
+            if (string.IsNullOrWhiteSpace(line) || line.StartsWith(CommentPrefix))
+                continue;
 
-            string correctAnswerIndex = lines[lineIndex + 4];
+            if (current == null)
+            {
+                if (TryParseTag(line, QuestionTag, out var questionText))
+                {
+                    current = new Question
+                    {
+                        Text = questionText,
+                        Answers = []
+                    };
+                }
+                else
+                {
+                    ThrowParseError(lineNumber, "Unexpected data outside of question block");
+                }
+            }
+            else
+            {
+                if (TryParseTag(line, ChoiceTag, out var choiceText))
+                {
+                    current.Answers.Add(choiceText);
+                }
+                else if (TryParseTag(line, CorrectIndexTag, out var indexText))
+                {
+                    if (current.Answers.Count < 2)
+                        ThrowParseError(lineNumber, "Unexpected data, not enough choices for closing a question");
 
-            Question question = new();
-            question.Text = questionText;
-            question.Answers = new string[3];
-            question.Answers[0] = answer1;
-            question.Answers[1] = answer2;
-            question.Answers[2] = answer3;
-            question.CorrectAnswerIndex = correctAnswerIndex;
+                    if (!int.TryParse(indexText, out int index))
+                        ThrowParseError(lineNumber, "Unexpected data, correct index not valid integer");
+
+                    if (index < 1 || index > current.Answers.Count)
+                        ThrowParseError(lineNumber, "Unexpected data, correct index outside of bounds");
+
+                    current.CorrectAnswerIndex = index - 1;
+                    questions.Add(current);
+                    current = null;
+                }
+                else
+                {
+                    ThrowParseError(lineNumber, "Unexpected data within question block");
+                }
+            }
         }
-        return questions;
+        if (current != null)
+            ThrowParseError(lineNumber, "File ended with question block still open");
+
+        if (questions.Count == 0)
+            ThrowParseError(lineNumber, "No valid Questions parsed from file");
+
+        return [.. questions];
     }
+
+    private static bool TryParseTag(string line, string tag, out string value)
+    {
+        if (line.StartsWith(tag, StringComparison.OrdinalIgnoreCase))
+        {
+            value = line[tag.Length..].Trim();
+            return true;
+        }
+        value = null;
+        return false;
+    }
+
+    private static void ThrowParseError(int lineNumber, string message) => 
+        throw new InvalidDataException($"Program.ParseQuestionsFromFile: Line {lineNumber}: {message}");
 }

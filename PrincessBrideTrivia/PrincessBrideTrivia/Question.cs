@@ -3,6 +3,6 @@
 public class Question
 {
     public string Text { get; set; }
-    public string[] Answers { get; set; }
-    public string CorrectAnswerIndex { get; set; }
+    public List<string> Answers { get; set; } = [];
+    public int CorrectAnswerIndex { get; set; }
 }

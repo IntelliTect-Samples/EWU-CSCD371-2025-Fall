@@ -1,35 +1,49 @@
-Finish this sentence, "My name is Inigo Montoya......"
-You killed my father, prepare to die.
-Would you like fries with that?
-Gimme a hive five!
-1
-Wesley's eyes are the color of?
-The fire of a thousand suns.
-High seas after a storm.
-Black as the night sky.
-2
-Lying "mostly dead" on Miracle Max's table, Wesley responds to Max's question "What's so important?" with what response?
-To blave
-True love
-As you wish
-2
-What is the name of the Six-Fingered Man?
-Prince Humperdink
-Inigo Montoya
-Count Rugen
-3
-What does "R.O.U.S." stand for?
-Rotten old umbrella stands
-Rats of usual shape
-Rodents of unusual size
-3
-What is the name of the poison that Westley uses to match wits with Vincini?
-Iokane
-Cyanide
-Iodine
-1
-Is Westley is left handed ?
-Yes
-No
-Neither
-2
+// question entries are as follows:
+// initiate a question entry with prefix: "QUESTION:"
+// initiate choices for the question with: "CHOICE:"
+// specify the correct answer by giving it's (1 based) index value after prefix "CORRECT:"
+// must initialize a question prior to supplying choices
+// must supply at least 2 choices prior to the correct index
+// must close a question by indicating the correct choice's index prior to supplying the next question
+
+QUESTION: Finish this sentence, "My name is Inigo Montoya......"
+CHOICE: You killed my father, prepare to die.
+CHOICE: Would you like fries with that?
+CHOICE: Gimme a hive five!
+CORRECT: 1
+
+QUESTION: Wesley's eyes are the color of?
+CHOICE: The fire of a thousand suns.
+CHOICE: High seas after a storm.
+CHOICE: Black as the night sky.
+CORRECT: 2
+
+QUESTION: Lying "mostly dead" on Miracle Max's table, Wesley responds to Max's question "What's so important?" with what response?
+CHOICE: To blave
+CHOICE: True love
+CHOICE: As you wish
+CORRECT: 2
+
+QUESTION: What is the name of the Six-Fingered Man?
+CHOICE: Prince Humperdink
+CHOICE: Inigo Montoya
+CHOICE: Count Rugen
+CORRECT: 3
+
+QUESTION: What does "R.O.U.S." stand for?
+CHOICE: Rotten old umbrella stands
+CHOICE: Rats of usual shape
+CHOICE: Rodents of unusual size
+CORRECT: 3
+
+QUESTION: What is the name of the poison that Westley uses to match wits with Vincini?
+CHOICE: Iokane
+CHOICE: Cyanide
+CHOICE: Iodine
+CORRECT: 1
+
+QUESTION: Is Westley is left handed ?
+CHOICE: Yes
+CHOICE: No
+CHOICE: Neither
+CORRECT: 2

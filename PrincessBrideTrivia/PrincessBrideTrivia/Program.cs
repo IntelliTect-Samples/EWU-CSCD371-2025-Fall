@@ -21,7 +21,7 @@ public class Program
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        return (int)Math.Round((double)numberCorrectAnswers * 100 / numberOfQuestions) + "%";
     }
 
     public static bool AskQuestion(Question question)

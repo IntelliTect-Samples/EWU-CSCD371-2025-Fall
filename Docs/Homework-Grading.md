@@ -1,0 +1,61 @@
+# Homework Schedule #
+
+* [Homework](Homework-Assignments.md) assignment will be assigned on Tuesday each week (except the first week of class)
+* [Homework](Homework-Assignments.md) is due by 11:59 pm the following Monday.
+* Peer review of another student's homework assignment due the following Wednesday by 11:59 pm.
+* Any final corrections to your assignment due by 11:59 pm the following Thursday.
+
+## Pairing ##
+
+Students are ***REQUIRED*** to [pair program](https://en.wikipedia.org/wiki/Pair_programming) on assignments. Collaboration is different from copying someone else' work. When collaborating with another student should do the following:
+
+* Both students **Must** have commits on the PR.
+* Only **one** of you should submit the pull request
+* In the description explicitly **[mention](https://blog.github.com/2011-03-23-mention-somebody-they-re-notified/)** (just @ their GitHub name) with a comment indicating you collaborated on the assignment.
+* Even though you pair with someone on an assignment, you **both** need to do a peer review independently on someone else's pull request.
+
+## Grading ##
+
+Each assignment is a total of 70 points. Assignment may contain up to 10 points of extra credit (will be specified in the assignment).
+
+There will be 1000 points available in the class. The breakdown of points is as follows:
+
+- 700 points for assignments (10 assignments, 70 points each).
+- 300 points (weighted) for exams.
+
+### Main Assignment ###
+
+#### (40 points + potentially 10 points extra credit) ####
+
+* Fundamentals: 10 points
+  * Assignment submitted on time (See [Late Work](#late-work))
+  * All code compiles
+  * Run without exceptions
+  * All unit tests pass
+* Assignment: 30 points
+  * All assignment requirements completed
+  * Code is appropriately unit tested
+* Extra credit: 10 points (not guaranteed for all assignments)
+  * These points given out at the instructor's discretion. These may not be given out if the assignment is not completed to a satisfactory level.
+
+### Peer Review ###
+
+#### (20 points) ####
+
+* A peer review is a [code review](./Homework-Assignments.md#Peer-Review) where you submit the grading report.
+* Review submitted on time (See [Late Work](#late-work))
+* Accuracy of code review (does your review line up with the instructor's review)
+* All Xs on code review report must have comments on the relevant portion of code explaining why.
+
+### Final corrections ###
+
+#### (10 points) ####
+
+* All assignment requirements completed
+* All code review comments addressed
+
+## Late Work ##
+
+Our policy is to not accept work turned in after the due date. If there are extenuating circumstances, either talk to one of the instructors or send an email to <EWU-Instructors@IntelliTect.com> as early as possible. Exceptions may be made at the instructors discretion on a case-by-case basis.
+
+If you have questions/comments/concerns about your grade please come email (<EWU-Instructors@IntelliTect.com>) or talk with one of the instructors.

@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "dgSpecHash": "DDGMPr4Shvw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\billm\\School\\.net\\Assignment1-Wmiller-Cstaton(cstaton fork)\\PrincessBrideTrivia\\PrincessBrideTrivia.Tests\\PrincessBrideTrivia.Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.applicationinsights\\2.23.0\\microsoft.applicationinsights.2.23.0.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.codecoverage\\17.14.1\\microsoft.codecoverage.17.14.1.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.net.test.sdk\\17.14.1\\microsoft.net.test.sdk.17.14.1.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testing.extensions.telemetry\\2.0.0-preview.25465.3\\microsoft.testing.extensions.telemetry.2.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testing.extensions.trxreport.abstractions\\2.0.0-preview.25465.3\\microsoft.testing.extensions.trxreport.abstractions.2.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testing.extensions.vstestbridge\\2.0.0-preview.25465.3\\microsoft.testing.extensions.vstestbridge.2.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testing.platform\\2.0.0-preview.25465.3\\microsoft.testing.platform.2.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testing.platform.msbuild\\2.0.0-preview.25465.3\\microsoft.testing.platform.msbuild.2.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testplatform.adapterutilities\\17.14.1\\microsoft.testplatform.adapterutilities.17.14.1.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.14.1\\microsoft.testplatform.objectmodel.17.14.1.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\microsoft.testplatform.testhost\\17.14.1\\microsoft.testplatform.testhost.17.14.1.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\mstest.analyzers\\4.0.0-preview.25465.3\\mstest.analyzers.4.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\mstest.testadapter\\4.0.0-preview.25465.3\\mstest.testadapter.4.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\mstest.testframework\\4.0.0-preview.25465.3\\mstest.testframework.4.0.0-preview.25465.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\system.collections.immutable\\8.0.0\\system.collections.immutable.8.0.0.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.0\\system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512",
+    "C:\\Users\\billm\\.nuget\\packages\\system.reflection.metadata\\8.0.0\\system.reflection.metadata.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,6 +1,4 @@
-﻿
-
-namespace PrincessBrideTrivia;
+﻿namespace PrincessBrideTrivia;
 
 public class Program
 {
@@ -23,6 +21,13 @@ public class Program
             }
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        DisplayScoreCard();
+    }
+
+    public static void DisplayScoreCard()
+    {
+        Console.WriteLine("\nScore Card:");
+        Console.WriteLine($"{"Your Answers",-15} | {"Correct Answers",15}");
         foreach (string entry in ScoreCard)
         {
             Console.WriteLine(entry);
@@ -40,7 +45,7 @@ public class Program
 
         string userGuess = GetGuessFromUser();
 
-        ScoreCard.Add("You answered: "+ userGuess + ". Correct answer: " + question.CorrectAnswerIndex);
+        ScoreCard.Add($"{userGuess,-15} | {question.CorrectAnswerIndex,15}");
 
         return DisplayResult(userGuess, question);
     }

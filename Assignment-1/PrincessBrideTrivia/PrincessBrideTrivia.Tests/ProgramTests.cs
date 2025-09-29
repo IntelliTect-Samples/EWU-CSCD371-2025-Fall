@@ -70,6 +70,8 @@ public class ProgramTests
     }
 
 
+    
+
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {
         for (int i = 0; i < numberOfQuestions; i++)
@@ -84,5 +86,26 @@ public class ProgramTests
             ];
             File.AppendAllLines(filePath, lines);
         }
+    }
+
+    // Unit test for hardmode
+    [TestMethod]
+    [DataRow("Answer 2", "2", true)]
+    [DataRow("answer 2", "2", true)]
+    [DataRow("Answer 1", "2", false)]
+    public void DisplayHardResult_ReturnsExpectedResult(string userGuess, string correctAnswerIndex, bool expected)
+    {
+        // Arrange
+        var question = new Question
+        {
+            Answers = new[] { "Answer 1", "Answer 2", "Answer 3" },
+            CorrectAnswerIndex = correctAnswerIndex
+        };
+
+        // Act
+        bool result = Program.DisplayHardResult(userGuess, question);
+
+        // Assert
+        Assert.AreEqual(expected, result);
     }
 }

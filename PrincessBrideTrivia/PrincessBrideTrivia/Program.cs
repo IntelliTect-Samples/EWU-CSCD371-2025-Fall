@@ -1,11 +1,17 @@
-﻿namespace PrincessBrideTrivia;
+﻿
+
+namespace PrincessBrideTrivia;
 
 public class Program
 {
+
+    public static List<string> ScoreCard = new List<string>();
+
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
+        
 
         int numberCorrect = 0;
         for (int i = 0; i < questions.Length; i++)
@@ -17,6 +23,10 @@ public class Program
             }
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        foreach (string entry in ScoreCard)
+        {
+            Console.WriteLine(entry);
+        }
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
@@ -29,6 +39,9 @@ public class Program
         DisplayQuestion(question);
 
         string userGuess = GetGuessFromUser();
+
+        ScoreCard.Add("You answered: "+ userGuess + ". Correct answer: " + question.CorrectAnswerIndex);
+
         return DisplayResult(userGuess, question);
     }
 

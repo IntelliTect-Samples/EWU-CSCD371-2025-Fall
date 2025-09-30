@@ -49,12 +49,13 @@ public class Program
             }
         }
 
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, numberOfQuestions) + " correct");
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return ((float)numberCorrectAnswers / (float)numberOfQuestions * 100) + "%";
+        double roundedPercent = Math.Round((float)numberCorrectAnswers / (float)numberOfQuestions * 100, 2);
+        return $"{roundedPercent}%";
     }
 
     public static (bool, bool) AskQuestion(Question question)
@@ -91,10 +92,10 @@ public class Program
 
     public static void DisplayQuestion(Question question)
     {
-        Console.WriteLine("Question: " + question.Text);
+        Console.WriteLine($"Question: {question.Text}");
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{i + 1}: {question.Answers[i]}");
         }
     }
 

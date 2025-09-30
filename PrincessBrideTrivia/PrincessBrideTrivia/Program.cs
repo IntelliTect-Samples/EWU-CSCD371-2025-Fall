@@ -2,6 +2,7 @@
 
 public class Program
 {
+    static int hintCount = 0;
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
@@ -16,7 +17,7 @@ public class Program
             {
                 numberCorrect++;
             }
-        //    Console.WriteLine(numberCorrect);
+            //    Console.WriteLine(numberCorrect);
 
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
@@ -36,6 +37,20 @@ public class Program
         DisplayQuestion(question);
 
         string userGuess = GetGuessFromUser();
+        Console.Write("Press HINT for hint\n");
+        while (userGuess != null && userGuess.ToUpper() == "HINT")
+        {
+            if (hintCount < 2)
+            {
+                hintCount++;
+                Console.WriteLine("HINT: " + question.CorrectAnswerIndex);
+            }
+            else
+            {
+                Console.WriteLine("No more hints available.");
+            }
+            userGuess = GetGuessFromUser();
+        }
         return DisplayResult(userGuess, question);
     }
 
@@ -63,6 +78,8 @@ public class Program
         {
             Console.WriteLine((i + 1) + ": " + question.Answers[i]);
         }
+         
+        
     }
 
     public static string GetFilePath()

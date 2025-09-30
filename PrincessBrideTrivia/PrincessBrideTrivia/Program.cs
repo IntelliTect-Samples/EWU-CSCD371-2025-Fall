@@ -27,9 +27,29 @@ public class Program
 
     public static bool ReplayQuiz()
     {
-        Console.WriteLine("Play again? (y/n)");
-        string input = Console.ReadLine();
-        return input != null && input.Trim().ToLower() == "y";
+        while (true)
+        {
+            Console.WriteLine("Play again? (y/n)");
+            var key = Console.ReadKey(intercept: true).Key;
+            Console.WriteLine();
+
+            if (key == ConsoleKey.Y)
+            {
+                return true;
+            }
+            else if (key == ConsoleKey.N)
+            {
+                return false;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter 'y' to play again or 'n' to quit.");
+            }
+
+
+        }
+        
+  
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)

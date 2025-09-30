@@ -69,6 +69,21 @@ public class ProgramTests
         Assert.AreEqual(expectedString, percentage);
     }
 
+    [TestMethod]
+    public async Task GenerateQuestions_SuccessfullyGeneratesQuestions()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+        Assert.IsNotNull(q);
+    }
+
+    [TestMethod]
+    public async Task GenerateQuestions_GeneratesFourChoices()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+        Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+        Assert.HasCount(4, q.Answers);
+    }
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {

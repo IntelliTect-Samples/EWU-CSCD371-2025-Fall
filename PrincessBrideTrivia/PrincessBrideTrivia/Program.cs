@@ -14,6 +14,7 @@ public class Program
         Question[] questions = LoadQuestions(filePath);
 
         int numberCorrect = 0;
+        int numberOfQuestions = questions.Length;
         bool runWhile = true;
 
         for (int i = 0; i < questions.Length; i++)
@@ -33,6 +34,7 @@ public class Program
             try
             {
                 bool result = AskQuestion(q);
+                numberOfQuestions++;
                 if (result)
                 {
                     numberCorrect++;
@@ -44,7 +46,7 @@ public class Program
             }
         }
 
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, numberOfQuestions) + " correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
@@ -160,6 +162,7 @@ public static class TriviaGenerator
             Rules:
             - The question must be unambiguous and answerable from the film (not the novel).
             - Answers must be short (max ~80 chars each) and mutually exclusive.
+            - Make sure to switch up which index is correct.
             - Do not include explanations, hints, or extra keys.
             - Do not include code fences. Print raw JSON only.
         """;
@@ -167,7 +170,7 @@ public static class TriviaGenerator
         var user = $"""
             Create ONE multiple-choice question.
             Number of options: {choices}.
-            Difficulty: medium.
+            Difficulty: hard.
         """;
 
         var completion = await client.CompleteChatAsync(
@@ -184,8 +187,6 @@ public static class TriviaGenerator
 
         var message = completion.Value.Content[0];
         var json = message.Text?.Trim();
-
-        Console.WriteLine(json);
 
         if (string.IsNullOrWhiteSpace(json))
             throw new InvalidOperationException("Model returned empty content.");

@@ -8,6 +8,7 @@ public class Program
         Question[] questions = LoadQuestions(filePath);
 
         int numberCorrect = 0;
+        // Console.WriteLine(questions.Length);
         for (int i = 0; i < questions.Length; i++)
         {
             bool result = AskQuestion(questions[i]);
@@ -15,13 +16,19 @@ public class Program
             {
                 numberCorrect++;
             }
+        //    Console.WriteLine(numberCorrect);
+
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        // Console.WriteLine("Number correct: " + numberCorrectAnswers);
+        // Console.WriteLine("Number of questions: " + numberOfQuestions);
+        // Console.WriteLine(((double)numberCorrectAnswers / (double)numberOfQuestions));
+        double result = (double)numberCorrectAnswers / (double)numberOfQuestions * 100;
+        return result.ToString("F2") + "%";
     }
 
     public static bool AskQuestion(Question question)
@@ -86,8 +93,6 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             questions[i] = question;
-
-
 
             question.CorrectAnswerIndex = correctAnswerIndex;
         }

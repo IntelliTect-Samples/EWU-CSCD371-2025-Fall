@@ -134,12 +134,10 @@ public class Program
 
 public static class TriviaGenerator
 {
-    // Model note: pick any capable text model you have access to.
     private const string Model = "gpt-4.1";
 
     /// <summary>
     /// Generates one Princess Bride multiple-choice question using the OpenAI API.
-    /// Respects the Question shape you've specified, including string index.
     /// </summary>
     public static async Task<Question> GeneratePrincessBrideQuestionAsync(string apiKey, int choices = 4)
     {
@@ -181,7 +179,7 @@ public static class TriviaGenerator
             },
             new ChatCompletionOptions
             {
-                // Mild creativity, but not so wild that it invents new plotlines
+                // Mild creativity
                 Temperature = (float)0.7
             });
 
@@ -191,7 +189,7 @@ public static class TriviaGenerator
         if (string.IsNullOrWhiteSpace(json))
             throw new InvalidOperationException("Model returned empty content.");
 
-        // Strict JSON parse; throw if the model colored outside the lines
+        // Strict JSON parse
         var question = JsonSerializer.Deserialize<Question>(json, new JsonSerializerOptions
         {
             ReadCommentHandling = JsonCommentHandling.Disallow,

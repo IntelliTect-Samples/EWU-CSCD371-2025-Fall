@@ -85,4 +85,33 @@ public class ProgramTests
             File.AppendAllLines(filePath, lines);
         }
     }
+
+    [TestMethod]
+    public void ReplayQuiz_ReturnsTrue()
+    {
+        // Arrange
+        var input = new StringReader("y\n");
+        Console.SetIn(input);
+
+        // Act
+        bool result = Program.ReplayQuiz();
+
+        // Assert
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    public void ReplayQuiz_ReturnsFalse()
+    {
+        // Arrange
+        var input = new StringReader("n\n");
+        Console.SetIn(input);
+
+        // Act
+        bool result = Program.ReplayQuiz();
+
+        // Assert
+        Assert.IsFalse(result);
+    }
+
 }

@@ -16,30 +16,70 @@ public class Program
                 numberCorrect++;
             }
         }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
     }
+
+
+
+    public static bool DisplayResult(string userGuess, Question question)
+{
+    // Preserve old API for tests; parse the string and forward to the int version
+    if (!int.TryParse((userGuess ?? string.Empty).Trim(), out int guess1Based))
+    {
+        Console.WriteLine("Please enter 1, 2, or 3:");
+        return false;
+    }
+    return DisplayResult(guess1Based, question);
+}
+
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        if (numberOfQuestions <= 0) return "0%";
+        // promote to double to avoid integer division, format as whole percent
+        double pct = (double)numberCorrectAnswers / numberOfQuestions * 100.0;
+        return $"{Math.Round(pct)}%";
     }
 
     public static bool AskQuestion(Question question)
     {
         DisplayQuestion(question);
 
-        string userGuess = GetGuessFromUser();
-        return DisplayResult(userGuess, question);
+        int userGuessIndex = GetGuessIndexFromUser();
+        return DisplayResult(userGuessIndex, question);
     }
 
     public static string GetGuessFromUser()
     {
-        return Console.ReadLine();
+        // keep this method for compatibility, but trim the input
+        return (Console.ReadLine() ?? string.Empty).Trim();
     }
 
-    public static bool DisplayResult(string userGuess, Question question)
+    private static int GetGuessIndexFromUser()
     {
-        if (userGuess == question.CorrectAnswerIndex)
+        // read, parse as 1-based integer; keep asking until valid
+        while (true)
+        {
+            string raw = GetGuessFromUser();
+            if (int.TryParse(raw, out int guess) && guess is >= 1 and <= 3)
+            {
+                return guess; // 1-based
+            }
+            Console.WriteLine("Please enter 1, 2, or 3:");
+        }
+    }
+
+    public static bool DisplayResult(int userGuessIndex1Based, Question question)
+    {
+        // CorrectAnswerIndex is coming from file; normalize/trim and parse
+        if (!int.TryParse(question.CorrectAnswerIndex?.Trim(), out int correct1Based))
+        {
+            Console.WriteLine("Question data invalid.");
+            return false;
+        }
+
+        if (userGuessIndex1Based == correct1Based)
         {
             Console.WriteLine("Correct");
             return true;
@@ -54,12 +94,13 @@ public class Program
         Console.WriteLine("Question: " + question.Text);
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{i + 1}: {question.Answers[i]}");
         }
     }
 
     public static string GetFilePath()
     {
+        // keep as-is; tests likely expect this exact name in the working directory
         return "Trivia.txt";
     }
 
@@ -67,26 +108,40 @@ public class Program
     {
         string[] lines = File.ReadAllLines(filePath);
 
-        Question[] questions = new Question[lines.Length / 5];
+        // Each question block is 5 lines: Q, A1, A2, A3, CorrectIndex
+        int block = 5;
+        if (lines.Length % block != 0)
+            throw new InvalidOperationException("Trivia file is malformed.");
+
+        Question[] questions = new Question[lines.Length / block];
         for (int i = 0; i < questions.Length; i++)
         {
-            int lineIndex = i * 5;
-            string questionText = lines[lineIndex];
+            int lineIndex = i * block;
 
-            string answer1 = lines[lineIndex + 1];
-            string answer2 = lines[lineIndex + 2];
-            string answer3 = lines[lineIndex + 3];
+            string questionText = lines[lineIndex].Trim();
 
-            string correctAnswerIndex = lines[lineIndex + 4];
+            string answer1 = lines[lineIndex + 1].Trim();
+            string answer2 = lines[lineIndex + 2].Trim();
+            string answer3 = lines[lineIndex + 3].Trim();
 
-            Question question = new();
-            question.Text = questionText;
-            question.Answers = new string[3];
-            question.Answers[0] = answer1;
-            question.Answers[1] = answer2;
-            question.Answers[2] = answer3;
-            question.CorrectAnswerIndex = correctAnswerIndex;
+            string correctAnswerIndex = lines[lineIndex + 4].Trim();
+
+            Question question = new()
+            {
+                Text = questionText,
+                Answers = new[] { answer1, answer2, answer3 },
+                // store the raw 1-based index string; we parse later
+                CorrectAnswerIndex = correctAnswerIndex
+            };
+
+            // ✅ this was missing:
+            questions[i] = question;
         }
+
+
+
+        
+
         return questions;
     }
 }

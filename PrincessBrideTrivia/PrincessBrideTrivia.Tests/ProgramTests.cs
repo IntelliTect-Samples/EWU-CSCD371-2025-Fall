@@ -73,6 +73,12 @@ public class ProgramTests
     public async Task GenerateQuestions_SuccessfullyGeneratesQuestions()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+        if (apiKey == null)
+        {
+            return; // test cannot run without the API key
+        }
+
         Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
         Assert.IsNotNull(q);
     }
@@ -81,6 +87,12 @@ public class ProgramTests
     public async Task GenerateQuestions_GeneratesFourChoices()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+        if (apiKey == null)
+        {
+            return; // test cannot run without the API key
+        }
+
         Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
         Assert.HasCount(4, q.Answers);
     }

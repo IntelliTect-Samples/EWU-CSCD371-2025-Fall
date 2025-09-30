@@ -72,8 +72,7 @@ public class Program
         if (numberOfQuestions == 0)
             return "N/A";
 
-        double precent = (double)numberCorrectAnswers / numberOfQuestions * 100;
-        return $"{precent:N0}%";
+        return $"{((double)numberCorrectAnswers / numberOfQuestions * 100):N0}%";
     }
 
     public static bool AskQuestion(Question question)

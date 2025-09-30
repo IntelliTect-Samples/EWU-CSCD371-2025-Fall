@@ -2,7 +2,7 @@
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task Main()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
@@ -113,13 +113,10 @@ public class Program
         {
             int lineIndex = i * 5;
 
-            Question question = new();
-            question.Text = lines[lineIndex];
-            question.Answers = new string[3];
+            Question question = new() { Text = lines[lineIndex], Answers = new string[3], CorrectAnswerIndex = lines[lineIndex + 4] };
             question.Answers[0] = lines[lineIndex + 1];
             question.Answers[1] = lines[lineIndex + 2];
             question.Answers[2] = lines[lineIndex + 3];
-            question.CorrectAnswerIndex = lines[lineIndex + 4];
 
             questions[i] = question;
         }

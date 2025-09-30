@@ -46,9 +46,7 @@ public class Program
                 Console.WriteLine("Invalid input. Please enter 'y' to play again or 'n' to quit.");
             }
 
-
-        }
-        
+        } 
   
     }
 

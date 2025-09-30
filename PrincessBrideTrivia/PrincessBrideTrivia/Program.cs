@@ -19,7 +19,7 @@ public class Program
 
         for (int i = 0; i < questions.Length; i++)
         {
-            bool result = AskQuestion(questions[i]);
+            (bool result, _) = AskQuestion(questions[i]);
             if (result)
             {
                 numberCorrect++;
@@ -30,19 +30,26 @@ public class Program
 
         while (runWhile)
         {
-            Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
             try
             {
-                bool result = AskQuestion(q);
-                numberOfQuestions++;
+                Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+
+                (bool result, runWhile) = AskQuestion(q);
+
+                if (runWhile)
+                {
+                    numberOfQuestions++;
+                }
+                
                 if (result)
                 {
                     numberCorrect++;
                 }
             }
-            catch (Exception)
+            catch (InvalidOperationException ex)
             {
-                runWhile = false;
+                Console.WriteLine(ex.Message);
+                continue;
             }
         }
 
@@ -54,7 +61,7 @@ public class Program
         return ((float)numberCorrectAnswers / (float)numberOfQuestions * 100) + "%";
     }
 
-    public static bool AskQuestion(Question question)
+    public static (bool, bool) AskQuestion(Question question)
     {
         DisplayQuestion(question);
 
@@ -62,10 +69,10 @@ public class Program
 
         if (userGuess == "exit")
         {
-            throw new Exception("user exit");
+            return (false, false);
         } else
         {
-            return DisplayResult(userGuess, question);
+            return (DisplayResult(userGuess, question), true);
         }
     }
 

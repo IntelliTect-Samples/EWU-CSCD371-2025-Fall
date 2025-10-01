@@ -24,7 +24,7 @@ public class Program
 
     public static bool DisplayResult(string userGuess, Question question)
 {
-    // Preserve old API for tests; parse the string and forward to the int version
+    
     if (!int.TryParse((userGuess ?? string.Empty).Trim(), out int guess1Based))
     {
         Console.WriteLine("Please enter 1, 2, or 3:");
@@ -72,7 +72,7 @@ public class Program
 
     public static bool DisplayResult(int userGuessIndex1Based, Question question)
     {
-        // CorrectAnswerIndex is coming from file; normalize/trim and parse
+        
         if (!int.TryParse(question.CorrectAnswerIndex?.Trim(), out int correct1Based))
         {
             Console.WriteLine("Question data invalid.");
@@ -100,7 +100,7 @@ public class Program
 
     public static string GetFilePath()
     {
-        // keep as-is; tests likely expect this exact name in the working directory
+        
         return "Trivia.txt";
     }
 
@@ -134,7 +134,7 @@ public class Program
                 CorrectAnswerIndex = correctAnswerIndex
             };
 
-            // ✅ this was missing:
+           
             questions[i] = question;
         }
 

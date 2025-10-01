@@ -2,10 +2,35 @@
 
 public class Program
 {
+
+    public class ScoreCardEntry {
+
+        public ScoreCardEntry(String userAnswer, String correctAnswer) {
+            UserAnswer = userAnswer;
+            CorrectAnswer = correctAnswer;
+        }
+
+        public string UserAnswer { get; }
+        public string CorrectAnswer { get; }
+
+        const int spaceCount = 15;
+
+        public override String ToString() {
+            return $"{this.UserAnswer,-spaceCount} | {this.CorrectAnswer,spaceCount}";
+        }
+
+        public static String GetScoreCardHeader() {
+            return $"{"Your Answers",-spaceCount} | {"Correct Answers", spaceCount}";
+        }
+    }
+
+    public static List<ScoreCardEntry> ScoreCard = new List<ScoreCardEntry>();
+
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
+        
 
         int numberCorrect = 0;
         for (int i = 0; i < questions.Length; i++)
@@ -17,11 +42,22 @@ public class Program
             }
         }
         Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        DisplayScoreCard();
+    }
+
+    public static void DisplayScoreCard()
+    {
+        Console.WriteLine("\nScore Card:");
+        Console.WriteLine(ScoreCardEntry.GetScoreCardHeader());
+        foreach (ScoreCardEntry entry in ScoreCard)
+        {
+            Console.WriteLine(entry.ToString());
+        }
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        return ((double)numberCorrectAnswers / numberOfQuestions * 100) + "%";
     }
 
     public static bool AskQuestion(Question question)
@@ -29,6 +65,9 @@ public class Program
         DisplayQuestion(question);
 
         string userGuess = GetGuessFromUser();
+
+        ScoreCard.Add(new ScoreCardEntry(userGuess, question.CorrectAnswerIndex));
+
         return DisplayResult(userGuess, question);
     }
 
@@ -86,7 +125,12 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+
+            questions[i] = question;   
         }
         return questions;
     }
+
+    
+
 }

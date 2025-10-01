@@ -1,5 +1,7 @@
 namespace PrincessBrideTrivia.Tests;
 
+
+
 [TestClass]
 public class ProgramTests
 {
@@ -69,6 +71,31 @@ public class ProgramTests
         Assert.AreEqual(expectedString, percentage);
     }
 
+    [TestMethod]
+    public void DisplayScoreCard_PrintsEntries()
+    {
+        // Arrange
+        Program.ScoreCard.Clear();
+        Program.ScoreCard.Add(new Program.ScoreCardEntry("1", "2"));
+        Program.ScoreCard.Add(new Program.ScoreCardEntry("1", "3"));
+
+        using StringWriter sw = new();
+        Console.SetOut(sw);
+
+        // Act
+        Program.DisplayScoreCard();
+
+        // Assert
+        string output = sw.ToString();
+        StringAssert.Contains(output, "Score Card:");
+        StringAssert.Contains(output, $"{1,-15} | {2,15}");
+        StringAssert.Contains(output, $"{1,-15} | {3,15}");
+
+        // Reset console
+        Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+    }
+
+
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {
@@ -85,4 +112,41 @@ public class ProgramTests
             File.AppendAllLines(filePath, lines);
         }
     }
+
+
+
+    [TestMethod]
+    public void DisplayScoreCard_DisplaysUserInputs()
+    {
+        // Arrange
+        Program.ScoreCard.Clear();
+            
+        string user1 = "A";
+        string user2 = "C";
+
+        Program.ScoreCard.Add(new Program.ScoreCardEntry(user1, "2"));
+        Program.ScoreCard.Add(new Program.ScoreCardEntry(user2, "2"));
+
+        var originalOut = Console.Out;
+        var sw = new System.IO.StringWriter();
+        try
+        {
+            Console.SetOut(sw);
+
+            // Act
+            Program.DisplayScoreCard();
+
+            // Assert 
+            string output = sw.ToString();
+            StringAssert.Contains(output,(user1));
+            StringAssert.Contains(output,(user2));
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
+
+
+
 }

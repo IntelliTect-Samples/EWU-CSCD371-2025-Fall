@@ -1,13 +1,14 @@
-﻿namespace PrincessBrideTrivia;
+﻿using System.Runtime.CompilerServices;
+
+namespace PrincessBrideTrivia;
 
 public class Program
 {
-    static int hintCount = 0;
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
-
+        Console.WriteLine("Type HINT for a hint");
         int numberCorrect = 0;
         // Console.WriteLine(questions.Length);
         for (int i = 0; i < questions.Length; i++)
@@ -29,29 +30,26 @@ public class Program
         // Console.WriteLine("Number of questions: " + numberOfQuestions);
         // Console.WriteLine(((double)numberCorrectAnswers / (double)numberOfQuestions));
         double result = (double)numberCorrectAnswers / (double)numberOfQuestions * 100;
-        return result.ToString("F2") + "%";
+        return (int)result + "%";
     }
 
     public static bool AskQuestion(Question question)
     {
+        
         DisplayQuestion(question);
-
         string userGuess = GetGuessFromUser();
-        Console.Write("Press HINT for hint\n");
-        while (userGuess != null && userGuess.ToUpper() == "HINT")
+        if (userGuess.ToUpper() == "HINT")
         {
-            if (hintCount < 2)
-            {
-                hintCount++;
-                Console.WriteLine("HINT: " + question.CorrectAnswerIndex);
-            }
-            else
-            {
-                Console.WriteLine("No more hints available.");
-            }
+            Console.WriteLine(DisplayHint(question));
             userGuess = GetGuessFromUser();
         }
+           
         return DisplayResult(userGuess, question);
+    }
+
+    public static string DisplayHint(Question question)
+    {
+        return "The correct answer is: " + question.CorrectAnswerIndex;
     }
 
     public static string GetGuessFromUser()

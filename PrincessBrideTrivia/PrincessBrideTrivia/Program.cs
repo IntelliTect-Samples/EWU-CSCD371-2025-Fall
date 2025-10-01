@@ -30,14 +30,13 @@ public class Program
         while (true)
         {
             Console.WriteLine("Play again? (y/n)");
-            var key = Console.ReadKey(intercept: true).Key;
-            Console.WriteLine();
+            string input = Console.ReadLine()?.Trim().ToLower();
 
-            if (key == ConsoleKey.Y)
+            if (input == "y")
             {
                 return true;
             }
-            else if (key == ConsoleKey.N)
+            else if (input == "n")
             {
                 return false;
             }

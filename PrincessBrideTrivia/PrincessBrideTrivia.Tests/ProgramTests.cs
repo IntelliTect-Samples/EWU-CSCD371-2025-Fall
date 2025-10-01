@@ -87,30 +87,33 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public void ReplayQuiz_ReturnsTrue()
+    public void ReplayQuiz_ReturnsTrue_WhenEnteringY()
     {
-        // Arrange
         var input = new StringReader("y\n");
         Console.SetIn(input);
 
-        // Act
         bool result = Program.ReplayQuiz();
-
-        // Assert
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void ReplayQuiz_ReturnsFalse()
+    public void ReplayQuiz_ReturnsFalse_WhenEnteringN()
     {
-        // Arrange
         var input = new StringReader("n\n");
         Console.SetIn(input);
 
-        // Act
+        bool result = Program.ReplayQuiz();
+        Assert.IsFalse(result);
+    }
+
+    [TestMethod]
+    public void ReplayQuiz_HandlesInvalidInputThenReturnsFalse()
+    { 
+        var input = new StringReader("x\nn\n");
+        Console.SetIn(input);
+
         bool result = Program.ReplayQuiz();
 
-        // Assert
         Assert.IsFalse(result);
     }
 

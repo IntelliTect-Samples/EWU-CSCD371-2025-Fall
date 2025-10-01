@@ -76,8 +76,8 @@ public class ProgramTests
     {
         // Arrange
         Program.ScoreCard.Clear();
-        Program.ScoreCard.Add($"{1,-15} | {2,15}");
-        Program.ScoreCard.Add($"{1,-15} | {3,15}");
+        Program.ScoreCard.Add(new Program.ScoreCardEntry("1", "2"));
+        Program.ScoreCard.Add(new Program.ScoreCardEntry("1", "3"));
 
         using StringWriter sw = new();
         Console.SetOut(sw);
@@ -124,8 +124,8 @@ public class ProgramTests
         string user1 = "A";
         string user2 = "C";
 
-        Program.ScoreCard.Add($"{user1,-15} | {"2",15}");
-        Program.ScoreCard.Add($"{user2,-15} | {"1",15}");
+        Program.ScoreCard.Add(new Program.ScoreCardEntry(user1, "2"));
+        Program.ScoreCard.Add(new Program.ScoreCardEntry(user2, "2"));
 
         var originalOut = Console.Out;
         var sw = new System.IO.StringWriter();

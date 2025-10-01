@@ -3,7 +3,28 @@
 public class Program
 {
 
-    public static List<string> ScoreCard = new List<string>();
+    public class ScoreCardEntry {
+
+        public ScoreCardEntry(String userAnswer, String correctAnswer) {
+            UserAnswer = userAnswer;
+            CorrectAnswer = correctAnswer;
+        }
+
+        public string UserAnswer { get; }
+        public string CorrectAnswer { get; }
+
+        const int spaceCount = 15;
+
+        public override String ToString() {
+            return $"{this.UserAnswer,-spaceCount} | {this.CorrectAnswer,spaceCount}";
+        }
+
+        public static String GetScoreCardHeader() {
+            return $"{"Your Answers",-spaceCount} | {"Correct Answers", spaceCount}";
+        }
+    }
+
+    public static List<ScoreCardEntry> ScoreCard = new List<ScoreCardEntry>();
 
     public static void Main(string[] args)
     {
@@ -27,11 +48,10 @@ public class Program
     public static void DisplayScoreCard()
     {
         Console.WriteLine("\nScore Card:");
-        const int spaceCount = 15;
-        Console.WriteLine($"{"Your Answers",-spaceCount} | {"Correct Answers", spaceCount}");
-        foreach (string entry in ScoreCard)
+        Console.WriteLine(ScoreCardEntry.GetScoreCardHeader());
+        foreach (ScoreCardEntry entry in ScoreCard)
         {
-            Console.WriteLine(entry);
+            Console.WriteLine(entry.ToString());
         }
     }
 
@@ -46,7 +66,7 @@ public class Program
 
         string userGuess = GetGuessFromUser();
 
-        ScoreCard.Add($"{userGuess,-15} | {question.CorrectAnswerIndex,15}");
+        ScoreCard.Add(new ScoreCardEntry(userGuess, question.CorrectAnswerIndex));
 
         return DisplayResult(userGuess, question);
     }

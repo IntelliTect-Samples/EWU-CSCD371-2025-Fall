@@ -69,6 +69,31 @@ public class ProgramTests
         Assert.AreEqual(expectedString, percentage);
     }
 
+    [TestMethod]
+    public void DisplayScoreCard_PrintsEntries()
+    {
+        // Arrange
+        Program.ScoreCard.Clear();
+        Program.ScoreCard.Add($"{1,-15} | {2,15}");
+        Program.ScoreCard.Add($"{1,-15} | {3,15}");
+
+        using StringWriter sw = new();
+        Console.SetOut(sw);
+
+        // Act
+        Program.DisplayScoreCard();
+
+        // Assert
+        string output = sw.ToString();
+        StringAssert.Contains(output, "Score Card:");
+        StringAssert.Contains(output, $"{1,-15} | {2,15}");
+        StringAssert.Contains(output, $"{1,-15} | {3,15}");
+
+        // Reset console
+        Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+    }
+
+
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {

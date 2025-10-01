@@ -27,7 +27,8 @@ public class Program
     public static void DisplayScoreCard()
     {
         Console.WriteLine("\nScore Card:");
-        Console.WriteLine($"{"Your Answers",-15} | {"Correct Answers",15}");
+        const int spaceCount = 15;
+        Console.WriteLine($"{"Your Answers",-spaceCount} | {"Correct Answers", spaceCount}");
         foreach (string entry in ScoreCard)
         {
             Console.WriteLine(entry);

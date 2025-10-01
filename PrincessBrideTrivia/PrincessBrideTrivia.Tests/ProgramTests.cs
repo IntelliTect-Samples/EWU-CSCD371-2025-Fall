@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace PrincessBrideTrivia.Tests;
 
 [TestClass]
@@ -87,34 +89,28 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public void ReplayQuiz_ReturnsTrue_WhenEnteringY()
+    public void ReplayQuiz_InputY_ReturnsTrue()
     {
-        var input = new StringReader("y\n");
-        Console.SetIn(input);
-
-        bool result = Program.ReplayQuiz();
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.Y });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
         Assert.IsTrue(result);
     }
 
     [TestMethod]
-    public void ReplayQuiz_ReturnsFalse_WhenEnteringN()
+    public void ReplayQuiz_InputN_ReturnsFalse()
     {
-        var input = new StringReader("n\n");
-        Console.SetIn(input);
-
-        bool result = Program.ReplayQuiz();
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.N });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
         Assert.IsFalse(result);
     }
 
     [TestMethod]
-    public void ReplayQuiz_HandlesInvalidInputThenReturnsFalse()
-    { 
-        var input = new StringReader("x\nn\n");
-        Console.SetIn(input);
-
-        bool result = Program.ReplayQuiz();
-
-        Assert.IsFalse(result);
+    public void ReplayQuiz_InvalidThenY_ReturnsTrue()
+    {
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.A, ConsoleKey.Y });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
+        Assert.IsTrue(result);
     }
+
 
 }

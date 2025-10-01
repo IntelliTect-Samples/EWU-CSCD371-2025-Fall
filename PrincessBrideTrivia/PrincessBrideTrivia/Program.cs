@@ -25,18 +25,20 @@ public class Program
     }
 
 
-    public static bool ReplayQuiz()
+    public static bool ReplayQuiz(Func<ConsoleKey> readKeyFunc = null)
     {
+        readKeyFunc ??= () => Console.ReadKey(intercept: true).Key;
         while (true)
         {
             Console.WriteLine("Play again? (y/n)");
-            string input = Console.ReadLine()?.Trim().ToLower();
+            var key = readKeyFunc();
+            Console.WriteLine();
 
-            if (input == "y")
+            if (key == ConsoleKey.Y)
             {
                 return true;
             }
-            else if (input == "n")
+            else if (key == ConsoleKey.N)
             {
                 return false;
             }
@@ -45,8 +47,7 @@ public class Program
                 Console.WriteLine("Invalid input. Please enter 'y' to play again or 'n' to quit.");
             }
 
-        } 
-  
+        }
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)

@@ -5,23 +5,56 @@ public class Program
     public static void Main(string[] args)
     {
         string filePath = GetFilePath();
-        Question[] questions = LoadQuestions(filePath);
-
-        int numberCorrect = 0;
-        for (int i = 0; i < questions.Length; i++)
+        do
         {
-            bool result = AskQuestion(questions[i]);
-            if (result)
+            Question[] questions = LoadQuestions(filePath);
+
+            int numberCorrect = 0;
+            for (int i = 0; i < questions.Length; i++)
             {
-                numberCorrect++;
+                bool result = AskQuestion(questions[i]);
+                if (result)
+                {
+                    numberCorrect++;
+                }
             }
+            Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        } 
+        while (ReplayQuiz());
+       
+    }
+
+
+    public static bool ReplayQuiz(Func<ConsoleKey> readKeyFunc = null)
+    {
+        readKeyFunc ??= () => Console.ReadKey(intercept: true).Key;
+        while (true)
+        {
+            Console.WriteLine("Play again? (y/n)");
+            var key = readKeyFunc();
+            Console.WriteLine();
+
+            if (key == ConsoleKey.Y)
+            {
+                return true;
+            }
+            else if (key == ConsoleKey.N)
+            {
+                return false;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter 'y' to play again or 'n' to quit.");
+            }
+
         }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        double percent = (double)numberCorrectAnswers / numberOfQuestions * 100;
+        return percent.ToString("0.##") + "%";  
+
     }
 
     public static bool AskQuestion(Question question)
@@ -86,6 +119,7 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+            questions[i] = question;
         }
         return questions;
     }

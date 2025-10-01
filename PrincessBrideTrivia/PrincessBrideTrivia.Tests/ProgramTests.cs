@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace PrincessBrideTrivia.Tests;
 
 [TestClass]
@@ -85,4 +87,30 @@ public class ProgramTests
             File.AppendAllLines(filePath, lines);
         }
     }
+
+    [TestMethod]
+    public void ReplayQuiz_InputY_ReturnsTrue()
+    {
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.Y });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    public void ReplayQuiz_InputN_ReturnsFalse()
+    {
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.N });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
+        Assert.IsFalse(result);
+    }
+
+    [TestMethod]
+    public void ReplayQuiz_InvalidThenY_ReturnsTrue()
+    {
+        var keys = new Queue<ConsoleKey>(new[] { ConsoleKey.A, ConsoleKey.Y });
+        bool result = Program.ReplayQuiz(() => keys.Dequeue());
+        Assert.IsTrue(result);
+    }
+
+
 }

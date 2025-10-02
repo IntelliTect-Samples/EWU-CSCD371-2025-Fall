@@ -39,7 +39,7 @@ public class Program
             attemptScores[attemptIndex] = numberCorrect;
             Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
             numberCorrect = 0;
-            if (attemptIndex != 2)
+            if (attemptIndex != maxAttempts - 1)
             {
                 Console.WriteLine("Do you want to make another attempt?");
                 Console.WriteLine("1 : Yes");
@@ -127,7 +127,7 @@ public class Program
         Console.WriteLine($"Question: {question.Text}");
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine($"{(i + 1)} : { question.Answers[i]}");
+            Console.WriteLine($"{(i + 1)} : {question.Answers[i]}");
         }
     }
 

@@ -92,7 +92,8 @@ public class ProgramTests
     [DataRow(-500)]
     public void RandomizeOrder_ResponseMaintainsContinuity(int seed)
     {
-        //Collect a range of possible answers
+        // Test randomization with different seeds to ensure the correct answer remains in the expected position 
+        // across multiple iterations
         for (int i = 0; i < 1000; i++)
         {
             // Arrange

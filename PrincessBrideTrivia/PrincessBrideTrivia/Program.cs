@@ -15,14 +15,19 @@ public class Program
 
         for (int i = 0; i < questions.Length; i++)
         {
-            (bool result, _) = AskQuestion(questions[i]);
+            (bool result, bool quitProgram) = AskQuestion(questions[i]);
+            if (quitProgram)
+            {
+                runWhile = false;
+                break;
+            }
             if (result)
             {
                 numberCorrect++;
             }
         }
 
-        Console.WriteLine("Enter 'exit' to exit");
+        Console.WriteLine("Enter 'quit' to exit");
 
         while (runWhile)
         {
@@ -30,16 +35,19 @@ public class Program
             {
                 Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
 
-                (bool result, runWhile) = AskQuestion(q);
+                (bool result, bool quitProgram) = AskQuestion(q);
 
-                if (runWhile)
+                if (quitProgram)
+                {
+                    runWhile = false;
+                }
+                else
                 {
                     numberOfQuestions++;
-                }
-                
-                if (result)
-                {
-                    numberCorrect++;
+                    if (result)
+                    {
+                        numberCorrect++;
+                    }
                 }
             }
             catch (InvalidOperationException ex)
@@ -58,19 +66,19 @@ public class Program
         return $"{roundedPercent}%";
     }
 
-    public static (bool, bool) AskQuestion(Question question)
+    // 🔹 Updated AskQuestion version
+    public static (bool answeredCorrectly, bool quitProgram) AskQuestion(Question question)
     {
         DisplayQuestion(question);
-
         string userGuess = GetGuessFromUser();
 
-        if (userGuess == "exit")
+        if (userGuess == "quit")
         {
-            return (false, false);
-        } else
-        {
-            return (DisplayResult(userGuess, question), true);
+            return (false, true);
         }
+
+        bool isCorrect = DisplayResult(userGuess, question);
+        return (isCorrect, false);
     }
 
     public static string GetGuessFromUser()
@@ -121,7 +129,6 @@ public class Program
             questions[i] = question;
         }
 
-        
         return questions;
     }
 }

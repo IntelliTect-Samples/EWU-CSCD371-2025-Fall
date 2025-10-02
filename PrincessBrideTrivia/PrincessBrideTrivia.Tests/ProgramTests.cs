@@ -16,7 +16,7 @@ public class ProgramTests
             Question[] questions = Program.LoadQuestions(filePath);
 
             // Assert 
-            Assert.HasCount(2, questions);
+            Assert.AreEqual(2, questions.Length);
         }
         finally
         {
@@ -94,7 +94,7 @@ public class ProgramTests
         }
 
         Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
-        Assert.HasCount(4, q.Answers);
+        Assert.AreEqual(4, q.Answers.Length);
     }
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)

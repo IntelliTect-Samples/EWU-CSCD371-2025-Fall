@@ -13,6 +13,9 @@ public class Program
         int numberOfQuestions = questions.Length;
         bool runWhile = true;
 
+        // ✅ Show quit option at the very start
+        Console.WriteLine("Type 'quit' anytime to exit");
+
         for (int i = 0; i < questions.Length; i++)
         {
             (bool result, bool quitProgram) = AskQuestion(questions[i]);
@@ -27,7 +30,12 @@ public class Program
             }
         }
 
-        Console.WriteLine("Enter 'quit' to exit");
+        // ✅ If user answered all file questions and we are NOT running AI loop, print score now
+        if (!runWhile || apiKey == null)
+        {
+            Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
+            return;
+        }
 
         while (runWhile)
         {
@@ -57,6 +65,7 @@ public class Program
             }
         }
 
+        // ✅ Always print score at the very end
         Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
     }
 
@@ -66,7 +75,6 @@ public class Program
         return $"{roundedPercent}%";
     }
 
-    // 🔹 Updated AskQuestion version
     public static (bool answeredCorrectly, bool quitProgram) AskQuestion(Question question)
     {
         DisplayQuestion(question);
@@ -121,7 +129,12 @@ public class Program
         {
             int lineIndex = i * 5;
 
-            Question question = new() { Text = lines[lineIndex], Answers = new string[3], CorrectAnswerIndex = lines[lineIndex + 4] };
+            Question question = new()
+            {
+                Text = lines[lineIndex],
+                Answers = new string[3],
+                CorrectAnswerIndex = lines[lineIndex + 4]
+            };
             question.Answers[0] = lines[lineIndex + 1];
             question.Answers[1] = lines[lineIndex + 2];
             question.Answers[2] = lines[lineIndex + 3];

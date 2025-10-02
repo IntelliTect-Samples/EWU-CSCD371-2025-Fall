@@ -34,7 +34,16 @@ public class Program
 
     public static string GetGuessFromUser()
     {
-        return Console.ReadLine();
+        string input;
+        do
+        {
+            input = Console.ReadLine();
+            if (int.TryParse(input, out int guess) && guess >= 1 && guess <= 3)
+            {
+                return input;
+            }
+            Console.WriteLine("Please enter a valid option (1, 2, or 3).");
+        } while (true);
     }
 
     public static bool DisplayResult(string userGuess, Question question)

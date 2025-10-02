@@ -30,8 +30,7 @@ public class ProgramTests
     public void DisplayResult_ReturnsTrueIfCorrect(string userGuess, bool expectedResult)
     {
         // Arrange
-        Question question = new();
-        question.CorrectAnswerIndex = "1";
+        Question question = new() { CorrectAnswerIndex = "1" };
 
         // Act
         bool displayResult = Program.DisplayResult(userGuess, question);
@@ -69,6 +68,33 @@ public class ProgramTests
         Assert.AreEqual(expectedString, percentage);
     }
 
+    [TestMethod]
+    public async Task GenerateQuestions_Success()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+        if (apiKey == null)
+        {
+            return; // test cannot run without the API key
+        }
+
+        Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+        Assert.IsNotNull(q);
+    }
+
+    [TestMethod]
+    public async Task GenerateQuestions_GeneratesFourChoices_Success()
+    {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
+        if (apiKey == null)
+        {
+            return; // test cannot run without the API key
+        }
+
+        Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+        Assert.HasCount(4, q.Answers);
+    }
 
     private static void GenerateQuestionsFile(string filePath, int numberOfQuestions)
     {

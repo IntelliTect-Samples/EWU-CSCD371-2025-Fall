@@ -2,34 +2,91 @@
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main()
     {
+        var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
 
         int numberCorrect = 0;
+        int numberOfQuestions = questions.Length;
+        bool runWhile = true;
+
+        // ✅ Show quit option at the very start
+        Console.WriteLine("Type 'quit' anytime to exit");
+
         for (int i = 0; i < questions.Length; i++)
         {
-            bool result = AskQuestion(questions[i]);
+            (bool result, bool quitProgram) = AskQuestion(questions[i]);
+            if (quitProgram)
+            {
+                runWhile = false;
+                break;
+            }
             if (result)
             {
                 numberCorrect++;
             }
         }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+
+        // ✅ If user answered all file questions and we are NOT running AI loop, print score now
+        if (!runWhile || apiKey == null)
+        {
+            Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
+            return;
+        }
+
+        while (runWhile)
+        {
+            try
+            {
+                Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+
+                (bool result, bool quitProgram) = AskQuestion(q);
+
+                if (quitProgram)
+                {
+                    runWhile = false;
+                }
+                else
+                {
+                    numberOfQuestions++;
+                    if (result)
+                    {
+                        numberCorrect++;
+                    }
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                continue;
+            }
+        }
+
+        // ✅ Always print score at the very end
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        double roundedPercent = Math.Round((float)numberCorrectAnswers / (float)numberOfQuestions * 100, 2);
+        return $"{roundedPercent}%";
     }
 
-    public static bool AskQuestion(Question question)
+    public static (bool answeredCorrectly, bool quitProgram) AskQuestion(Question question)
     {
         DisplayQuestion(question);
-
         string userGuess = GetGuessFromUser();
-        return DisplayResult(userGuess, question);
+
+        if (userGuess == "quit")
+        {
+            return (false, true);
+        }
+
+        bool isCorrect = DisplayResult(userGuess, question);
+        return (isCorrect, false);
     }
 
     public static string GetGuessFromUser()
@@ -51,10 +108,10 @@ public class Program
 
     public static void DisplayQuestion(Question question)
     {
-        Console.WriteLine("Question: " + question.Text);
+        Console.WriteLine($"Question: {question.Text}");
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{i + 1}: {question.Answers[i]}");
         }
     }
 
@@ -71,22 +128,20 @@ public class Program
         for (int i = 0; i < questions.Length; i++)
         {
             int lineIndex = i * 5;
-            string questionText = lines[lineIndex];
 
-            string answer1 = lines[lineIndex + 1];
-            string answer2 = lines[lineIndex + 2];
-            string answer3 = lines[lineIndex + 3];
+            Question question = new()
+            {
+                Text = lines[lineIndex],
+                Answers = new string[3],
+                CorrectAnswerIndex = lines[lineIndex + 4]
+            };
+            question.Answers[0] = lines[lineIndex + 1];
+            question.Answers[1] = lines[lineIndex + 2];
+            question.Answers[2] = lines[lineIndex + 3];
 
-            string correctAnswerIndex = lines[lineIndex + 4];
-
-            Question question = new();
-            question.Text = questionText;
-            question.Answers = new string[3];
-            question.Answers[0] = answer1;
-            question.Answers[1] = answer2;
-            question.Answers[2] = answer3;
-            question.CorrectAnswerIndex = correctAnswerIndex;
+            questions[i] = question;
         }
+
         return questions;
     }
 }

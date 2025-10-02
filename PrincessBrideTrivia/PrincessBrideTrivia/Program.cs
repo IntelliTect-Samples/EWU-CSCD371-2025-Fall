@@ -1,12 +1,8 @@
-﻿using OpenAI.Chat;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace PrincessBrideTrivia;
+﻿namespace PrincessBrideTrivia;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task Main()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
@@ -19,7 +15,7 @@ public class Program
 
         for (int i = 0; i < questions.Length; i++)
         {
-            bool result = AskQuestion(questions[i]);
+            (bool result, _) = AskQuestion(questions[i]);
             if (result)
             {
                 numberCorrect++;
@@ -30,31 +26,39 @@ public class Program
 
         while (runWhile)
         {
-            Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
             try
             {
-                bool result = AskQuestion(q);
-                numberOfQuestions++;
+                Question q = await TriviaGenerator.GeneratePrincessBrideQuestionAsync(apiKey);
+
+                (bool result, runWhile) = AskQuestion(q);
+
+                if (runWhile)
+                {
+                    numberOfQuestions++;
+                }
+                
                 if (result)
                 {
                     numberCorrect++;
                 }
             }
-            catch (Exception)
+            catch (InvalidOperationException ex)
             {
-                runWhile = false;
+                Console.WriteLine(ex.Message);
+                continue;
             }
         }
 
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, numberOfQuestions) + " correct");
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, numberOfQuestions)} correct");
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return ((float)numberCorrectAnswers / (float)numberOfQuestions * 100) + "%";
+        double roundedPercent = Math.Round((float)numberCorrectAnswers / (float)numberOfQuestions * 100, 2);
+        return $"{roundedPercent}%";
     }
 
-    public static bool AskQuestion(Question question)
+    public static (bool, bool) AskQuestion(Question question)
     {
         DisplayQuestion(question);
 
@@ -62,10 +66,10 @@ public class Program
 
         if (userGuess == "exit")
         {
-            throw new Exception("user exit");
+            return (false, false);
         } else
         {
-            return DisplayResult(userGuess, question);
+            return (DisplayResult(userGuess, question), true);
         }
     }
 
@@ -88,10 +92,10 @@ public class Program
 
     public static void DisplayQuestion(Question question)
     {
-        Console.WriteLine("Question: " + question.Text);
+        Console.WriteLine($"Question: {question.Text}");
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{i + 1}: {question.Answers[i]}");
         }
     }
 
@@ -108,114 +112,16 @@ public class Program
         for (int i = 0; i < questions.Length; i++)
         {
             int lineIndex = i * 5;
-            string questionText = lines[lineIndex];
 
-            string answer1 = lines[lineIndex + 1];
-            string answer2 = lines[lineIndex + 2];
-            string answer3 = lines[lineIndex + 3];
-
-            string correctAnswerIndex = lines[lineIndex + 4];
-
-            Question question = new();
-            question.Text = questionText;
-            question.Answers = new string[3];
-            question.Answers[0] = answer1;
-            question.Answers[1] = answer2;
-            question.Answers[2] = answer3;
-            question.CorrectAnswerIndex = correctAnswerIndex;
+            Question question = new() { Text = lines[lineIndex], Answers = new string[3], CorrectAnswerIndex = lines[lineIndex + 4] };
+            question.Answers[0] = lines[lineIndex + 1];
+            question.Answers[1] = lines[lineIndex + 2];
+            question.Answers[2] = lines[lineIndex + 3];
 
             questions[i] = question;
         }
 
         
         return questions;
-    }
-}
-
-public static class TriviaGenerator
-{
-    private const string Model = "gpt-4.1";
-
-    /// <summary>
-    /// Generates one Princess Bride multiple-choice question using the OpenAI API.
-    /// </summary>
-    public static async Task<Question> GeneratePrincessBrideQuestionAsync(string apiKey, int choices = 4)
-    {
-        if (string.IsNullOrWhiteSpace(apiKey))
-            throw new ArgumentException("API key is required.", nameof(apiKey));
-
-        if (choices is < 3 or > 6)
-            throw new ArgumentOutOfRangeException(nameof(choices), "choices must be between 3 and 6.");
-
-        var client = new ChatClient(model: Model, apiKey: apiKey);
-
-        var system = """
-            You generate trivia strictly about the 1987 film "The Princess Bride".
-            Output ONLY a single JSON object with this exact C#-friendly shape:
-            {
-              "Text": string,                // the question text
-              "Answers": string[],           // exactly N distinct options, concise, no markup
-              "CorrectAnswerIndex": string   // "1"-based index of the correct answer, as a string
-            }
-            Rules:
-            - The question must be unambiguous and answerable from the film (not the novel).
-            - Answers must be short (max ~80 chars each) and mutually exclusive.
-            - Make sure to switch up which index is correct.
-            - Do not include explanations, hints, or extra keys.
-            - Do not include code fences. Print raw JSON only.
-        """;
-
-        var user = $"""
-            Create ONE multiple-choice question.
-            Number of options: {choices}.
-            Difficulty: hard.
-        """;
-
-        var completion = await client.CompleteChatAsync(
-            new ChatMessage[]
-            {
-                new SystemChatMessage(system),
-                new UserChatMessage(user)
-            },
-            new ChatCompletionOptions
-            {
-                // Mild creativity
-                Temperature = (float)0.7
-            });
-
-        var message = completion.Value.Content[0];
-        var json = message.Text?.Trim();
-
-        if (string.IsNullOrWhiteSpace(json))
-            throw new InvalidOperationException("Model returned empty content.");
-
-        // Strict JSON parse
-        var question = JsonSerializer.Deserialize<Question>(json, new JsonSerializerOptions
-        {
-            ReadCommentHandling = JsonCommentHandling.Disallow,
-            AllowTrailingCommas = false,
-            PropertyNameCaseInsensitive = true,
-            NumberHandling = JsonNumberHandling.Strict
-        });
-
-        Validate(question, choices);
-        return question!;
-    }
-
-    private static void Validate(Question q, int expectedChoices)
-    {
-        if (q is null) throw new InvalidOperationException("Failed to parse the model's JSON.");
-        if (string.IsNullOrWhiteSpace(q.Text)) throw new InvalidOperationException("Question text missing.");
-        if (q.Answers is null || q.Answers.Length != expectedChoices)
-            throw new InvalidOperationException($"Expected {expectedChoices} answers, got {q?.Answers?.Length ?? 0}.");
-
-        if (q.Answers.Any(string.IsNullOrWhiteSpace))
-            throw new InvalidOperationException("One or more answers are empty.");
-
-        if (!int.TryParse(q.CorrectAnswerIndex, out var idx))
-            throw new InvalidOperationException("CorrectAnswerIndex must be a numeric string.");
-
-        if (idx < 0 || idx >= q.Answers.Length)
-            throw new InvalidOperationException("CorrectAnswerIndex out of range.");
     }
 }

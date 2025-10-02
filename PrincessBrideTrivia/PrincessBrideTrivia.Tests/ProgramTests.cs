@@ -69,7 +69,7 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public async Task GenerateQuestions_SuccessfullyGeneratesQuestions()
+    public async Task GenerateQuestions_Success()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 
@@ -83,7 +83,7 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public async Task GenerateQuestions_GeneratesFourChoices()
+    public async Task GenerateQuestions_GeneratesFourChoices_Success()
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
 

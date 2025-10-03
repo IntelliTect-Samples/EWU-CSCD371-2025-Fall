@@ -4,7 +4,8 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<LangVersion>11.0</LangVersion>
-	</PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />

@@ -40,7 +40,7 @@ public class FileLoggerTests
     public void FileLogger_NullFilePath_ThrowsException()
     {
         //Arrange
-        string path = null;
+        string? path = null;
         //Act
         //Assert
         Assert.ThrowsExactly<ArgumentException>(() => new FileLogger(path));

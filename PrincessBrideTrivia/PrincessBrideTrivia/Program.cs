@@ -16,12 +16,13 @@ public class Program
                 numberCorrect++;
             }
         }
-        Console.WriteLine("You got " + GetPercentCorrect(numberCorrect, questions.Length) + " correct");
+        Console.WriteLine($"You got {GetPercentCorrect(numberCorrect, questions.Length)} correct");
+
     }
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        return Math.Round((double)numberCorrectAnswers * 100 / numberOfQuestions) + "%";
     }
 
     public static bool AskQuestion(Question question)
@@ -54,7 +55,7 @@ public class Program
         Console.WriteLine("Question: " + question.Text);
         for (int i = 0; i < question.Answers.Length; i++)
         {
-            Console.WriteLine((i + 1) + ": " + question.Answers[i]);
+            Console.WriteLine($"{i + 1}: {question.Answers[i]}");
         }
     }
 
@@ -86,6 +87,8 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+
+            questions[i] = question;
         }
         return questions;
     }

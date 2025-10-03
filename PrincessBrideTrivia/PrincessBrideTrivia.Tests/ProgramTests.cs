@@ -24,6 +24,33 @@ public class ProgramTests
         }
     }
 
+    // test to make sure program doesnt crash on 0 questions
+
+    [TestMethod]
+    public void GetPercentCorrect_NumberOfQuestionsZero_Returns0Percent()
+    {
+        string pct = Program.GetPercentCorrect(0, 0);
+        Assert.AreEqual("0%", pct);
+    }
+
+[TestMethod]
+public void DisplayResult_IntOverload_ReturnsTrueWhenGuessMatches()
+{
+
+    var q = new Question { CorrectAnswerIndex = "3" };
+    bool result = Program.DisplayResult(3, q);
+    Assert.IsTrue(result);
+}
+
+[TestMethod]
+public void DisplayResult_IntOverload_ReturnsFalseWhenGuessDoesNotMatch()
+{
+    var q = new Question { CorrectAnswerIndex = "2" };
+    bool result = Program.DisplayResult(1, q);
+    Assert.IsFalse(result);
+}
+
+
     [TestMethod]
     [DataRow("1", true)]
     [DataRow("2", false)]

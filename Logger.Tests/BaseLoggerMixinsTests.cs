@@ -8,13 +8,12 @@ namespace Logger.Tests;
 public class BaseLoggerMixinsTests
 {
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void Error_WithNullLogger_ThrowsException()
     {
         // Arrange
 
         // Act
-        BaseLoggerMixins.Error(null, "");
+        Assert.ThrowsExactly<ArgumentNullException>(() => BaseLoggerMixins.Error(null, ""));
 
         // Assert
     }

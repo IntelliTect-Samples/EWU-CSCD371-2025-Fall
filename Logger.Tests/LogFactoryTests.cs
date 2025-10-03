@@ -43,9 +43,9 @@ public class LogFactoryTests
         //Arrange
         var factory = new LogFactory();
         //Act & Assert
-        Assert.ThrowsException<ArgumentException>(() => factory.ConfigureFileLogger(null));
-        Assert.ThrowsException<ArgumentException>(() => factory.ConfigureFileLogger(""));
-        Assert.ThrowsException<ArgumentException>(() => factory.ConfigureFileLogger("   "));
+        Assert.ThrowsExactly<ArgumentException>(() => factory.ConfigureFileLogger(null));
+        Assert.ThrowsExactly<ArgumentException>(() => factory.ConfigureFileLogger(""));
+        Assert.ThrowsExactly<ArgumentException>(() => factory.ConfigureFileLogger("   "));
     }
 
     [TestMethod]

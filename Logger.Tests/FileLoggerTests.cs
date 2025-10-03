@@ -43,7 +43,7 @@ public class FileLoggerTests
         string path = null;
         //Act
         //Assert
-        Assert.ThrowsException<ArgumentException>(() => new FileLogger(path));
+        Assert.ThrowsExactly<ArgumentException>(() => new FileLogger(path));
     }
 
     [TestMethod]
@@ -53,7 +53,7 @@ public class FileLoggerTests
         string path = "";
         //Act
         //Assert
-        Assert.ThrowsException<ArgumentException>(() => new FileLogger(path));
+        Assert.ThrowsExactly<ArgumentException>(() => new FileLogger(path));
     }
 
     [TestMethod]
@@ -63,7 +63,7 @@ public class FileLoggerTests
         string path = "   ";
         //Act
         //Assert
-        Assert.ThrowsException<ArgumentException>(() => new FileLogger(path));
+        Assert.ThrowsExactly<ArgumentException>(() => new FileLogger(path));
     }
 
     [TestMethod]

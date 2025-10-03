@@ -24,4 +24,9 @@ public class FileLogger : BaseLogger
         sw.WriteLine($"{timestamp} {className} {logLevel}: {message}");
 
     }
+
+    public string GetFilePath()
+    {
+        return _filePath;
+    }
 }

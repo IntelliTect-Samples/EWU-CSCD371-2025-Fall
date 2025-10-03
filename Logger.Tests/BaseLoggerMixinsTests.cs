@@ -34,6 +34,17 @@ public class BaseLoggerMixinsTests
         Assert.AreEqual("Message 42", logger.LoggedMessages[0].Message);
     }
 
+    [TestMethod]
+    public void ClassName_ReturnsCorrectName()
+    {
+        // Arrange
+        var logger = new TestLogger();
+        // Act
+        var className = logger.ClassName;
+        // Assert
+        Assert.AreEqual(nameof(TestLogger), className);
+    }
+
 }
 
 public class TestLogger : BaseLogger

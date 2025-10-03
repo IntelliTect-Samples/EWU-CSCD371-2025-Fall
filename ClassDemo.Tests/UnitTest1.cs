@@ -6,12 +6,73 @@
         [InlineData("admin", "goodpassword")]
         [InlineData("InigoMontoya", "goodpassword")]
         [InlineData("PrincessButtercup", "goodpassword")]
-        public void TryLogin_WithGoodPassword_SuccessfulLogin(string username, string password)
+        public void TryLogin_WithGoodPassword_SuccessfulLogin(string username, String password)
         {
             Program program = new();
             Assert.True(program.TryLogin(username, password));
+
+            Program.Multiply(2, 3);
         }
 
+        [Fact]
+        public void SwapTest()
+        {
+
+            // Arrange
+            int left = 1;
+            int right = 2;
+            // Act
+            try
+            {
+                Program.Swap(ref left, ref right);
+            }
+            catch (InvalidCastException)
+            {
+            }
+            Assert.Equal(2, left);
+            //Assert.Equal(1, right);
+            // Assert
+        }
+        [Fact]
+        public void SwapStringTest()
+        {
+
+            // Arrange
+            string left = "1";
+            string right = "2";
+
+            // Act
+            Program.Swap(left, right);
+            Assert.Equal("2", left);
+            Assert.Equal("1", right);
+        }
+
+        [Fact]
+        public void ToUpperStringTest()
+        {
+
+            string first = "Inigo " + "Montoya";
+            string second = "Inigo Montoya";
+            second = second.ToUpper();
+            Assert.Equal("INIGO MONTOYA", second);
+        }
+
+        [Fact]
+        public void TupleSwapTest()
+        {
+            // Arrange
+            string left = "1";
+            string right = "2";
+
+            // Act
+            (string wasRight, string wasLeft) =
+                Program.SwapTuple(left, right);
+            Assert.Equal("2", wasRight);
+            Assert.Equal("1", wasLeft);
+
+            (right, left) = Program.SwapTuple(left, right);
+            Assert.Equal(("1", "3"), (right, left));
+        }
 
         [Fact]
         // MethodUnderTest_ConditionUnderTest_ExpectedResult

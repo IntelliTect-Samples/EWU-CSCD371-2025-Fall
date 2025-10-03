@@ -18,7 +18,7 @@ Read **Chapters 4-6** with an **especially careful read of Chapter 6**. Pay spec
   - The message ❌✔
   - The format may vary, but an example might look like this "10/7/2019 12:38:59 AM FileLoggerTests Warning: Test message"
 - The `LogFactory` should be updated with a new method `ConfigureFileLogger`. This should take in a file path and store it in a **private member**. It should use this when instantiating a new `FileLogger` in its `CreateLogger` method. ❌✔
-- If the file logger has not be configured in the `LogFactory`, its `CreateLogger` method should return `null`. ❌✔
+- If the file logger has not been configured in the `LogFactory`, its `CreateLogger` method should return `null`. ❌✔
 - Inside of `BaseLoggerMixins` implement **extension methods** on `BaseLogger` for
   - `Error`, ❌✔
   - `Warning`, ❌✔

@@ -21,7 +21,8 @@ public class Program
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        double percentCorrect = ((double)numberCorrectAnswers / numberOfQuestions * 100);
+        return ((int)percentCorrect + "%");    
     }
 
     public static bool AskQuestion(Question question)
@@ -34,7 +35,21 @@ public class Program
 
     public static string GetGuessFromUser()
     {
-        return Console.ReadLine();
+        string input;
+        do
+        {
+            input = Console.ReadLine();
+            if (input == null)
+            {
+                Console.WriteLine("Null input received. Exiting.");
+                Environment.Exit(1); // suggested by AI, but seems reasonable here
+            }
+            if (int.TryParse(input, out int guess) && guess >= 1 && guess <= 3)
+            {
+                return input;
+            }
+            Console.WriteLine("Please enter a valid option (1, 2, or 3).");
+        } while (true);
     }
 
     public static bool DisplayResult(string userGuess, Question question)
@@ -86,6 +101,7 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+            questions[i] = question;
         }
         return questions;
     }

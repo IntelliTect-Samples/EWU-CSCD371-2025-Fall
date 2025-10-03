@@ -6,7 +6,7 @@ public class ProgramTests
     [TestMethod]
     public void LoadQuestions_RetrievesQuestionsFromFile()
     {
-        string filePath = Path.GetRandomFileName();
+        string filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
         try
         {
             // Arrange
@@ -74,14 +74,14 @@ public class ProgramTests
     {
         for (int i = 0; i < numberOfQuestions; i++)
         {
-            string[] lines =
-            [
+            string[] lines = new string[]
+            {
                 "Question " + i + " this is the question text",
                 "Answer 1",
                 "Answer 2",
                 "Answer 3",
                 "2",
-            ];
+            };
             File.AppendAllLines(filePath, lines);
         }
     }

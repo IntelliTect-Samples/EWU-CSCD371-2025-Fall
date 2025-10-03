@@ -1,8 +1,9 @@
 ﻿namespace PrincessBrideTrivia;
 
+
 public class Program
 {
-    public static void Main(string[] args)
+    public static void Main(string[] args) 
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
@@ -21,7 +22,10 @@ public class Program
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return (numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        if (numberOfQuestions == 0) return "0%";
+        double percent = (double)numberCorrectAnswers / numberOfQuestions * 100.0;
+        // Format without decimal places
+        return ((int)percent).ToString() + "%";
     }
 
     public static bool AskQuestion(Question question)
@@ -65,12 +69,13 @@ public class Program
 
     public static Question[] LoadQuestions(string filePath)
     {
+        const int questionSize = 5;
         string[] lines = File.ReadAllLines(filePath);
 
-        Question[] questions = new Question[lines.Length / 5];
+        Question[] questions = new Question[lines.Length / questionSize];
         for (int i = 0; i < questions.Length; i++)
         {
-            int lineIndex = i * 5;
+            int lineIndex = i * questionSize;
             string questionText = lines[lineIndex];
 
             string answer1 = lines[lineIndex + 1];
@@ -86,6 +91,7 @@ public class Program
             question.Answers[1] = answer2;
             question.Answers[2] = answer3;
             question.CorrectAnswerIndex = correctAnswerIndex;
+            questions[i] = question;
         }
         return questions;
     }

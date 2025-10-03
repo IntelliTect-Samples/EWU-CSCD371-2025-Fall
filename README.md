@@ -11,11 +11,11 @@ Next Week the reading is Chapters 4-6 so schedule accordingly. (It is a lot of r
 
 ## Assignment Details
 
-* Pull Request title includes "Assignment 1" in the title ✔❌
-* Partner has also made a commit ✔❌
-* Pull Request targets Assignment 1 branch ✔❌
-* Issue 1: Application no longer crashes ✔❌
-* Issue 2: Unit test properly passes ✔❌
+* Pull Request title includes "Assignment 1" in the title ✔
+* Partner has also made a commit ✔
+* Pull Request targets Assignment 1 branch ✔
+* Issue 1: Application no longer crashes ✔
+* Issue 2: Unit test properly passes ✔
 
 ## Extra Credit
 

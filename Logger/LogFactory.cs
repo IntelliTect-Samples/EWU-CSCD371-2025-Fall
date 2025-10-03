@@ -15,7 +15,6 @@ public class LogFactory
 
         return new FileLogger(_filePath)
         {
-            
             ClassName = className
         };
     }

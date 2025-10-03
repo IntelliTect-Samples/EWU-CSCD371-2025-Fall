@@ -5,4 +5,8 @@
     <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="NewFile1.txt" />
+  </ItemGroup>
+
 </Project>

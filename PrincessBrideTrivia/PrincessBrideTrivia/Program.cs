@@ -21,7 +21,8 @@ public class Program
 
     public static string GetPercentCorrect(int numberCorrectAnswers, int numberOfQuestions)
     {
-        return ((double)numberCorrectAnswers / numberOfQuestions * 100) + "%";
+        double percentCorrect = ((double)numberCorrectAnswers / numberOfQuestions * 100);
+        return ((int)percentCorrect + "%");    
     }
 
     public static bool AskQuestion(Question question)
@@ -38,6 +39,11 @@ public class Program
         do
         {
             input = Console.ReadLine();
+            if (input == null)
+            {
+                Console.WriteLine("Null input received. Exiting.");
+                Environment.Exit(1); // suggested by AI, but seems reasonable here
+            }
             if (int.TryParse(input, out int guess) && guess >= 1 && guess <= 3)
             {
                 return input;

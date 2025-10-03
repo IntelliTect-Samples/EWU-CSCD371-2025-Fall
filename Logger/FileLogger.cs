@@ -2,7 +2,7 @@
 
 using System.IO;
 
-class FileLogger : BaseLogger
+public class FileLogger : BaseLogger
 {
     private string _filePath;
 
@@ -21,5 +21,10 @@ class FileLogger : BaseLogger
     public FileLogger(string filePath)
     {
         this._filePath = filePath;
+    }
+
+    public string GetFilePath()
+    {
+        return _filePath;
     }
 }
